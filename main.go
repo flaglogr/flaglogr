@@ -1,0 +1,5 @@
+package flaglogr
+
+func main()  {
+	
+}

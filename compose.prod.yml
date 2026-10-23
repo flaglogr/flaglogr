@@ -1,0 +1,1 @@
+# Uses clickhouse for storing the logs and postgres for configuration

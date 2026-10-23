@@ -1,0 +1,22 @@
+# SQLite db used for ease of installation. Only suitable to very small scale (<200K events stored and <500 ingests per second)
+services:
+  flaglogr:
+    container_name: flaglogr
+    ports:
+      - 8080:8080
+  image: ghcr.io/flaglogr/flaglogr:latest
+  restart: unless-stopped
+  volumes:
+    - fl_data:/data
+  environment:
+    # Flaglogr will spin up two sqlite instances
+    FLAGLOGR_DATA_DB_DRIVER: sqlite
+    FLAGLOGR_EVENTS_DB_DRIVER: sqlite
+    FLAGLOGR_PORT: 8080
+    FLAGLOGR_LOG_RETENTION_LIMIT: 30d
+    FLAGLOGR_LOG_EVENTS_LIMIT_PROJECT: 200000
+    FLAGLOGR_TRUSTED_HEADER_AUTH_ENABLE: false 
+    FLAGLOGR_OIDC_ENABLE: false
+    FLAGLOGR_OIDC_ISSUER: issuer url
+    FLAGLOGR_OIDC_CLIENT_ID: client id
+    FLAGLOGR_OIDC_CLIENT_SECRET: secret

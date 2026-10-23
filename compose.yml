@@ -1,0 +1,1 @@
+# Default setup, what is most likely fine for a smaller (<1M events stored at any time and <2K events/s ingest) application
