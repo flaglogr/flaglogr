@@ -9,14 +9,22 @@ services:
   volumes:
     - fl_data:/data
   environment:
+    FLAGR_APP_URL: http://localhost:8080 # Change this to what the public URL of flaglogr is
+    FLAGLOGR_LOG_LEVEL: warn
     # Flaglogr will spin up two sqlite instances
     FLAGLOGR_DATA_DB_DRIVER: sqlite
     FLAGLOGR_EVENTS_DB_DRIVER: sqlite
     FLAGLOGR_PORT: 8080
     FLAGLOGR_LOG_RETENTION_LIMIT: 30d
-    FLAGLOGR_LOG_EVENTS_LIMIT_PROJECT: 200000
-    FLAGLOGR_TRUSTED_HEADER_AUTH_ENABLE: false 
-    FLAGLOGR_OIDC_ENABLE: false
-    FLAGLOGR_OIDC_ISSUER: issuer url
-    FLAGLOGR_OIDC_CLIENT_ID: client id
-    FLAGLOGR_OIDC_CLIENT_SECRET: secret
+    FLAGLOGR_LOG_EVENTS_LIMIT_PROJECT: 200000 # Doesn't do anything yet
+    FLAGLOGR_AUTH_TYPE: basic # or trusted-header or oidc
+    # Set passwords to log into flaglogr here. All of these users are implicitly granted ADMIN PRIVILIGES
+    # !!This is only for testing purposes and in production you should use Trusted Header Auth or OpenID Connect!!
+    FLAGLOGR_BASIC_AUTH_CREDENTIALS: admin:admin,user:user
+    # FLAGLOGR_TRUSTED_HEADER_AUTH_USERNAME_CLAIM_HEADER: Remote-User
+    # FLAGLOGR_TRUSTED_HEADER_AUTH_GROUPS_CLAIM_HEADER: Remote-Groups
+    # FLAGLOGR_TRUSTED_HEADER_AUTH_SECRET: my_super_safe_secret
+    #
+    # FLAGLOGR_OIDC_ISSUER: issuer url
+    # FLAGLOGR_OIDC_CLIENT_ID: client id
+    # FLAGLOGR_OIDC_CLIENT_SECRET: secret
