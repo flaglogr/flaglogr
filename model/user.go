@@ -12,4 +12,5 @@ type Group struct {
 	Projects []Project
 	IsAdmin  bool
 	Name     string
+	Users    []User `gorm:"many2many:user_groups;"`
 }
