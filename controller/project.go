@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"fmt"
 	"strconv"
 
 	"github.com/TwiN/logr"
@@ -62,7 +62,7 @@ type UpdateProjectRequest struct {
 func (m *Controller) UpdateProject(c *gin.Context) {
 	body := UpdateProjectRequest{}
 	if err := c.BindJSON(&body); err != nil {
-		log.Print("Error for JSON binding, ", err)
+		logr.Error(fmt.Sprintf("Error for JSON binding, %e", err))
 		c.AbortWithStatus(400)
 		return
 	}
@@ -94,6 +94,6 @@ func (m *Controller) DeleteProject(c *gin.Context) {
 		c.AbortWithStatus(400)
 		return
 	}
-	logr.Debug(string(id))
+	logr.Debug(fmt.Sprintf("%d", id))
 	c.JSON(200, nil)
 }

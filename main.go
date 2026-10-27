@@ -1,4 +1,4 @@
-package flaglogr
+package main
 
 func main()  {
 	
