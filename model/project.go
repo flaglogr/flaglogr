@@ -1,8 +1,9 @@
 package model
 
 type Project struct {
-	ID        uint `gorm:"primaryKey"`
-	APIKeys []APIKey
+	ID          uint `gorm:"primaryKey"`
+	APIKeys     []APIKey
+	Evaluations []Evaluation
 }
 
 type APIKey struct {

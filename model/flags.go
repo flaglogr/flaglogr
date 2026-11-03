@@ -10,7 +10,7 @@ type Flag struct {
 
 type FlagValues struct {
 	FlagID      uint
-	DeployShare uint // Can be between 0 and 100 (i.e. percentage, must be integer)
+	DeployShare uint // Can be between 0 and 100 (i.e. percentage, must be integer) if just one, for the flag, then ignored
 	ID          uint `gorm:"primaryKey"`
 	ValueType   string
 	Value       string
