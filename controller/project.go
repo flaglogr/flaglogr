@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetAdminSellers gin handler
+// Gin handler to get all projects
 //
-// @Summary		Get all sellers
-// @Description	Retrieve a list of all currently registered sellers to modify
+// @Summary		get all projects
+// @Description	Retrieve a list of all projects of all groups of the current user
 // @Tags		projects
 // @Produce		json
 // @Success		200	{object}		nil "TODO: Update"
@@ -22,10 +22,10 @@ import (
 func (m *Controller) GetProjects(c *gin.Context) {
 }
 
-// GetAdminAllUsers gin handler
+// Gin handler to create a new project
 //
-// @Summary		Get all users of this instance
-// @Description	Retrieve a list of all currently registered users to create a new seller
+// @Summary		Create a new project
+// @Description	Create a new project for a given group
 // @Tags		admin
 // @Produce		json
 // @Accept      json
@@ -44,10 +44,10 @@ type UpdateProjectRequest struct {
 	PublicID string `json:"publicId" example:"com.janishutz"`
 }
 
-// CreateSeller gin handler
+// Gin handler to update project
 //
-// @Summary		Create a new seller
-// @Description	Create a new seller from a given user ID and other parametes
+// @Summary		Update a project
+// @Description	Update the specified project
 // @Tags		admin
 // @Produce		json
 // @Accept      json
@@ -71,8 +71,8 @@ func (m *Controller) UpdateProject(c *gin.Context) {
 
 // DeleteSeller gin handler
 //
-// @Summary		Delete given seller
-// @Description	Deletes the specified seller permanently, no questions asked, including products
+// @Summary		Delete given project
+// @Description	Deletes the specified project permanently, no questions asked, including all flags, evaluations and results
 // @Tags		admin
 // @Produce		json
 // @Param		id path string true "The SellerID as supplied by the sellers endpoint"
