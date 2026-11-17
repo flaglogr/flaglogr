@@ -18,7 +18,7 @@ import (
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		500	{object}		nil
-// @Router		/api/projects/get [get]
+// @Router		/api/v1/projects/get [get]
 func (m *Controller) GetProjects(c *gin.Context) {
 }
 
@@ -33,7 +33,7 @@ func (m *Controller) GetProjects(c *gin.Context) {
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		500	{object}		httputil.HTTPError
-// @Router		/api/projects/create [put]
+// @Router		/api/v1/projects/create [put]
 func (m *Controller) CreateProject(c *gin.Context) {
 	c.JSON(200, nil)
 }
@@ -58,7 +58,7 @@ type UpdateProjectRequest struct {
 // @Failure		403	{object}		nil
 // @Failure		409	{object}		nil "Seller already exists"
 // @Failure		500	{object}		httputil.HTTPError
-// @Router		/api/projects/update/{id} [post]
+// @Router		/api/v1/projects/update/{id} [post]
 func (m *Controller) UpdateProject(c *gin.Context) {
 	body := UpdateProjectRequest{}
 	if err := c.BindJSON(&body); err != nil {
@@ -82,7 +82,7 @@ func (m *Controller) UpdateProject(c *gin.Context) {
 // @Failure		403	{object}		nil
 // @Failure		404	{object}		nil "User was not found"
 // @Failure		500	{object}		httputil.HTTPError
-// @Router		/api/projects/delete/{id} [delete]
+// @Router		/api/v1/projects/delete/{id} [delete]
 func (m *Controller) DeleteProject(c *gin.Context) {
 	idRaw, found := c.Params.Get("id")
 	if !found {
