@@ -131,7 +131,7 @@ func (m *Controller) UpdateProject(c *gin.Context) {
 // @Failure		400	{object}		nil
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
-// @Failure		404	{object}		nil "User was not found"
+// @Failure		404	{object}		nil "Project was not found"
 // @Failure		500	{object}		nil
 // @Router		/api/v1/projects/delete/{id} [delete]
 func (m *Controller) DeleteProject(c *gin.Context) {

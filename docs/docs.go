@@ -193,14 +193,9 @@ const docTemplate = `{
         "model.CreateProjectRequest": {
             "type": "object",
             "required": [
-                "groupId",
                 "name"
             ],
             "properties": {
-                "groupId": {
-                    "type": "integer",
-                    "example": 1
-                },
                 "name": {
                     "type": "string",
                     "maxLength": 100,
@@ -234,6 +229,10 @@ const docTemplate = `{
         "model.UpdateProjectRequest": {
             "type": "object",
             "properties": {
+                "groupId": {
+                    "type": "integer",
+                    "example": 1
+                },
                 "name": {
                     "type": "string",
                     "maxLength": 250,
@@ -258,7 +257,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{"http", "https"},
 	Title:            "flaglogr backend",
-	Description:      "# flaglogr backend\n",
+	Description:      "Log in via [here](/auth/v2/login)\n",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

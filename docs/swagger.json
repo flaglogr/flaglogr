@@ -5,7 +5,7 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "# flaglogr backend\n",
+        "description": "Log in via [here](/auth/v2/login)\n",
         "title": "flaglogr backend",
         "termsOfService": "https://janishutz.com/legal/tos/",
         "contact": {
@@ -190,14 +190,9 @@
         "model.CreateProjectRequest": {
             "type": "object",
             "required": [
-                "groupId",
                 "name"
             ],
             "properties": {
-                "groupId": {
-                    "type": "integer",
-                    "example": 1
-                },
                 "name": {
                     "type": "string",
                     "maxLength": 100,
@@ -231,6 +226,10 @@
         "model.UpdateProjectRequest": {
             "type": "object",
             "properties": {
+                "groupId": {
+                    "type": "integer",
+                    "example": 1
+                },
                 "name": {
                     "type": "string",
                     "maxLength": 250,

@@ -9,16 +9,12 @@ definitions:
     type: object
   model.CreateProjectRequest:
     properties:
-      groupId:
-        example: 1
-        type: integer
       name:
         example: name
         maxLength: 100
         minLength: 3
         type: string
     required:
-    - groupId
     - name
     type: object
   model.Project:
@@ -38,6 +34,9 @@ definitions:
     type: object
   model.UpdateProjectRequest:
     properties:
+      groupId:
+        example: 1
+        type: integer
       name:
         example: name
         maxLength: 250
@@ -50,7 +49,7 @@ info:
     name: Support
     url: https://github.com/flaglogr/flaglogr#readme
   description: |
-    # flaglogr backend
+    Log in via [here](/auth/v2/login)
   license:
     name: GNU Affero General Public License 3.0
     url: https://www.gnu.org/licenses/agpl-3.0.en.html
