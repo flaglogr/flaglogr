@@ -22,19 +22,13 @@ import (
 // @Failure		500	{object}		nil
 // @Router		/api/v1/projects/get [get]
 func (m *Controller) GetProjects(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
-	if err != nil {
-		c.AbortWithStatus(400)
-		return
-	}
-
 	uid, ok := sessions.Default(c).Get("userid").(uint)
 	if !ok {
 		c.AbortWithStatus(401)
 		return
 	}
 
-	project, err := m.db.GetProject(uint(id), uid)
+	project, err := m.db.GetAllProjects(uid)
 	if err != nil {
 		c.AbortWithStatus(404)
 	}

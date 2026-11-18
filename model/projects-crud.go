@@ -7,6 +7,10 @@ import (
 	"gorm.io/gorm"
 )
 
+func (c *DBConnector) GetAllProjects(uid uint) ([]Project, error) {
+	return gorm.G[Project](c.DB).Where("user_id = ?", uid).Find(ctx)
+}
+
 func (c *DBConnector) GetProject(id uint, uid uint) (Project, error) {
 	return gorm.G[Project](c.DB).Where("id = ? AND user_id = ?", id, uid).First(ctx)
 }
