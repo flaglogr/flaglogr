@@ -1,9 +1,13 @@
 package model
 
+import "time"
+
 type Project struct {
 	ID          uint         `json:"-" gorm:"primaryKey"`
-	GroupID     uint         `json:"-"`
+	UserID      uint         `json:"-"` // Owner
+	Members     []User       `json:"-" grom:"many2many:user_projects"`
 	Name        string       `json:"name"`
+	UpdatedAt   time.Time    `json:"updatedAt"`
 	APIKeys     []APIKey     `json:"apiKeys" gorm:"constraint:OnDelete:CASCADE;"`
 	Evaluations []Evaluation `json:"-" gorm:"constraint:OnDelete:CASCADE;"`
 	Analytics   []Analytics  `json:"-" gorm:"constraint:OnDelete:CASCADE;"`
@@ -14,4 +18,16 @@ type APIKey struct {
 	ProjectID uint   `json:"-"`
 	Name      string `json:"name"`
 	Key       string `json:"-"`
+}
+
+type CreateProjectRequest struct {
+	Name string `json:"name" example:"name" maxLength:"100" minLength:"3" validate:"required" binding:"required,min=3,max=100,printascii"`
+}
+
+type UpdateProjectRequest struct {
+	Name *string `json:"name" example:"name" maxLength:"250" minLength:"3" validate:"optional" binding:"omitempty,min=3,max=250,printascii"`
+}
+
+type CreateAPIKeyRequest struct {
+	Name string `json:"name" example:"name" maxLength:"100" minLength:"3" validate:"required" binding:"required,min=3,max=100,printascii"`
 }

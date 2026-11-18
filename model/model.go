@@ -37,7 +37,6 @@ func Init(prod bool, conf *config.Config) *DBConnector {
 	db.Exec("PRAGMA foreign_keys = ON")
 
 	db.AutoMigrate(&User{})
-	db.AutoMigrate(&Group{})
 	db.AutoMigrate(&Evaluation{})
 	db.AutoMigrate(&EvaluationResult{})
 	db.AutoMigrate(&Flag{})

@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/TwiN/logr"
+	"github.com/flaglogr/flaglogr/model"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,19 +31,34 @@ func (m *Controller) GetProjects(c *gin.Context) {
 // @Tags		projects
 // @Produce		json
 // @Accept      json
-// @Param		payload body string true "TODO: Define"
+// @Param		payload body model.CreateProjectRequest true "TODO: Define"
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		500	{object}		nil
 // @Router		/api/v1/projects/create [put]
 func (m *Controller) CreateProject(c *gin.Context) {
-	c.JSON(200, nil)
-}
+	var req model.CreateProjectRequest
+	err := c.BindJSON(&req)
+	if err != nil {
+		logr.Debug(fmt.Sprint("Failed to parse body to create asset, error: ", err))
+		c.AbortWithStatus(400)
+		return
+	}
 
-type UpdateProjectRequest struct {
-	UserID   uint   `json:"uid" example:"1"`
-	Website  string `json:"website" example:"https://janishutz.com"`
-	PublicID string `json:"publicId" example:"com.janishutz"`
+	uid, ok := sessions.Default(c).Get("userid").(uint)
+	if !ok {
+		c.AbortWithStatus(401)
+		return
+	}
+
+	id, ok := m.db.CreateProject(req, uid)
+	if ok {
+		c.JSON(201, CreatedResponse{
+			Id: id,
+		})
+	} else {
+		c.AbortWithStatus(500)
+	}
 }
 
 // Gin handler to update project
@@ -51,16 +68,15 @@ type UpdateProjectRequest struct {
 // @Tags		projects
 // @Produce		json
 // @Accept      json
-// @Param		payload body UpdateProjectRequest true "Used to update or create the seller"
+// @Param		payload body model.UpdateProjectRequest true "Details to update for the project"
 // @Success		200	{object}		nil "Seller created successfully"
 // @Failure		400	{object}		nil
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
-// @Failure		409	{object}		nil "Seller already exists"
 // @Failure		500	{object}		nil
-// @Router		/api/v1/projects/update/{id} [post]
+// @Router		/api/v1/projects/update/{id} [patch]
 func (m *Controller) UpdateProject(c *gin.Context) {
-	body := UpdateProjectRequest{}
+	body := model.UpdateProjectRequest{}
 	if err := c.BindJSON(&body); err != nil {
 		logr.Error(fmt.Sprintf("Error for JSON binding, %e", err))
 		c.AbortWithStatus(400)
