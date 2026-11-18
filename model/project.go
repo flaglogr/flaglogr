@@ -4,8 +4,8 @@ import "time"
 
 type Project struct {
 	ID          uint         `json:"-" gorm:"primaryKey"`
-	UserID      uint         `json:"-"` // Owner
-	Members     []User       `json:"-" grom:"many2many:user_projects"`
+	UserID      uint         `json:"-"`
+	GroupID     *uint        `json:"-"`
 	Name        string       `json:"name"`
 	UpdatedAt   time.Time    `json:"updatedAt"`
 	APIKeys     []APIKey     `json:"apiKeys" gorm:"constraint:OnDelete:CASCADE;"`
@@ -25,7 +25,8 @@ type CreateProjectRequest struct {
 }
 
 type UpdateProjectRequest struct {
-	Name *string `json:"name" example:"name" maxLength:"250" minLength:"3" validate:"optional" binding:"omitempty,min=3,max=250,printascii"`
+	Name    *string `json:"name" example:"name" maxLength:"250" minLength:"3" validate:"optional" binding:"omitempty,min=3,max=250,printascii"`
+	GroupID *uint   `json:"groupId" example:"1" validate:"optional" binding:"omitempty,numeric"`
 }
 
 type CreateAPIKeyRequest struct {

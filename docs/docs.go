@@ -39,12 +39,12 @@ const docTemplate = `{
                 "summary": "Create a new project",
                 "parameters": [
                     {
-                        "description": "TODO: Define",
+                        "description": "The project to create",
                         "name": "payload",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.CreateProjectRequest"
                         }
                     }
                 ],
@@ -74,7 +74,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "The SellerID as supplied by the sellers endpoint",
+                        "description": "The project ID as supplied by the get endpoint",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -135,7 +135,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/projects/update/{id}": {
-            "post": {
+            "patch": {
                 "description": "Update the specified project",
                 "consumes": [
                     "application/json"
@@ -149,18 +149,18 @@ const docTemplate = `{
                 "summary": "Update a project",
                 "parameters": [
                     {
-                        "description": "Used to update or create the seller",
+                        "description": "Details to update for the project",
                         "name": "payload",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UpdateProjectRequest"
+                            "$ref": "#/definitions/model.UpdateProjectRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Seller created successfully"
+                        "description": "Project updated successfully"
                     },
                     "400": {
                         "description": "Bad Request"
@@ -171,9 +171,6 @@ const docTemplate = `{
                     "403": {
                         "description": "Forbidden"
                     },
-                    "409": {
-                        "description": "Seller already exists"
-                    },
                     "500": {
                         "description": "Internal Server Error"
                     }
@@ -182,28 +179,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controller.UpdateProjectRequest": {
-            "type": "object",
-            "required": [
-                "publicId",
-                "uid",
-                "website"
-            ],
-            "properties": {
-                "publicId": {
-                    "type": "string",
-                    "example": "com.janishutz"
-                },
-                "uid": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "website": {
-                    "type": "string",
-                    "example": "https://janishutz.com"
-                }
-            }
-        },
         "model.APIKey": {
             "type": "object",
             "required": [
@@ -215,11 +190,31 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateProjectRequest": {
+            "type": "object",
+            "required": [
+                "groupId",
+                "name"
+            ],
+            "properties": {
+                "groupId": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
+                    "example": "name"
+                }
+            }
+        },
         "model.Project": {
             "type": "object",
             "required": [
                 "apiKeys",
-                "name"
+                "name",
+                "updatedAt"
             ],
             "properties": {
                 "apiKeys": {
@@ -230,6 +225,20 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateProjectRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 250,
+                    "minLength": 3,
+                    "example": "name"
                 }
             }
         }

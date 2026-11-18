@@ -19,6 +19,9 @@ func (c *DBConnector) UpdateProject(id uint, req UpdateProjectRequest, uid uint)
 
 	project.Name = dereferenceOrDefault(req.Name, project.Name)
 	project.UpdatedAt = time.Now()
+	if req.GroupID != nil {
+		project.GroupID = req.GroupID
+	}
 
 	if c.DB.Save(&project).Error != nil {
 		return false
@@ -27,9 +30,9 @@ func (c *DBConnector) UpdateProject(id uint, req UpdateProjectRequest, uid uint)
 }
 
 func (c *DBConnector) CreateProject(req CreateProjectRequest, userid uint) (uint, bool) {
-	// TODO: Get user and associate it to that user
 	project := Project{
 		Name:      req.Name,
+		UserID:    userid,
 		UpdatedAt: time.Now(),
 	}
 
@@ -42,15 +45,12 @@ func (c *DBConnector) CreateProject(req CreateProjectRequest, userid uint) (uint
 }
 
 func (c *DBConnector) DeleteProject(id uint, uid uint) bool {
-	project, err := c.GetProject(id, uid)
+	_, err := c.GetProject(id, uid)
 	if err != nil {
 		logr.Error(err.Error())
 		return false
 	}
 
-	logr.Debugf("%s", project)
-
-	c.DB.Exec("DELETE FROM `subtopics_projects` WHERE project_id = ?; DELETE FROM `subjects_assets` WHERE asset_id = ?", id, id)
 	if rows, err := gorm.G[Project](c.DB).Where("id = ?", id).Delete(ctx); err != nil || rows == 0 {
 		return false
 	}

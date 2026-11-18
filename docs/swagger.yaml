@@ -1,26 +1,24 @@
 basePath: /
 definitions:
-  controller.UpdateProjectRequest:
-    properties:
-      publicId:
-        example: com.janishutz
-        type: string
-      uid:
-        example: 1
-        type: integer
-      website:
-        example: https://janishutz.com
-        type: string
-    required:
-    - publicId
-    - uid
-    - website
-    type: object
   model.APIKey:
     properties:
       name:
         type: string
     required:
+    - name
+    type: object
+  model.CreateProjectRequest:
+    properties:
+      groupId:
+        example: 1
+        type: integer
+      name:
+        example: name
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - groupId
     - name
     type: object
   model.Project:
@@ -31,9 +29,20 @@ definitions:
         type: array
       name:
         type: string
+      updatedAt:
+        type: string
     required:
     - apiKeys
     - name
+    - updatedAt
+    type: object
+  model.UpdateProjectRequest:
+    properties:
+      name:
+        example: name
+        maxLength: 250
+        minLength: 3
+        type: string
     type: object
 info:
   contact:
@@ -55,12 +64,12 @@ paths:
       - application/json
       description: Create a new project for a given group
       parameters:
-      - description: 'TODO: Define'
+      - description: The project to create
         in: body
         name: payload
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/model.CreateProjectRequest'
       produces:
       - application/json
       responses:
@@ -78,7 +87,7 @@ paths:
       description: Deletes the specified project permanently, no questions asked,
         including all flags, evaluations and results
       parameters:
-      - description: The SellerID as supplied by the sellers endpoint
+      - description: The project ID as supplied by the get endpoint
         in: path
         name: id
         required: true
@@ -123,30 +132,28 @@ paths:
       tags:
       - projects
   /api/v1/projects/update/{id}:
-    post:
+    patch:
       consumes:
       - application/json
       description: Update the specified project
       parameters:
-      - description: Used to update or create the seller
+      - description: Details to update for the project
         in: body
         name: payload
         required: true
         schema:
-          $ref: '#/definitions/controller.UpdateProjectRequest'
+          $ref: '#/definitions/model.UpdateProjectRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: Seller created successfully
+          description: Project updated successfully
         "400":
           description: Bad Request
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
-        "409":
-          description: Seller already exists
         "500":
           description: Internal Server Error
       summary: Update a project

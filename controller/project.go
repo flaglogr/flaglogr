@@ -22,6 +22,23 @@ import (
 // @Failure		500	{object}		nil
 // @Router		/api/v1/projects/get [get]
 func (m *Controller) GetProjects(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.AbortWithStatus(400)
+		return
+	}
+
+	uid, ok := sessions.Default(c).Get("userid").(uint)
+	if !ok {
+		c.AbortWithStatus(401)
+		return
+	}
+
+	project, err := m.db.GetProject(uint(id), uid)
+	if err != nil {
+		c.AbortWithStatus(404)
+	}
+	c.JSON(200, project)
 }
 
 // Gin handler to create a new project
@@ -31,7 +48,7 @@ func (m *Controller) GetProjects(c *gin.Context) {
 // @Tags		projects
 // @Produce		json
 // @Accept      json
-// @Param		payload body model.CreateProjectRequest true "TODO: Define"
+// @Param		payload body model.CreateProjectRequest true "The project to create"
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		500	{object}		nil
@@ -69,20 +86,38 @@ func (m *Controller) CreateProject(c *gin.Context) {
 // @Produce		json
 // @Accept      json
 // @Param		payload body model.UpdateProjectRequest true "Details to update for the project"
-// @Success		200	{object}		nil "Seller created successfully"
+// @Success		200	{object}		nil "Project updated successfully"
 // @Failure		400	{object}		nil
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		500	{object}		nil
 // @Router		/api/v1/projects/update/{id} [patch]
 func (m *Controller) UpdateProject(c *gin.Context) {
-	body := model.UpdateProjectRequest{}
-	if err := c.BindJSON(&body); err != nil {
-		logr.Error(fmt.Sprintf("Error for JSON binding, %e", err))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
 		c.AbortWithStatus(400)
 		return
 	}
-	c.JSON(200, nil)
+
+	var req model.UpdateProjectRequest
+	err = c.BindJSON(&req)
+	if err != nil {
+		logr.Debug(fmt.Sprint("Failed to parse body to update project, error: ", err))
+		c.Abort()
+		return
+	}
+
+	uid, ok := sessions.Default(c).Get("userid").(uint)
+	if !ok {
+		c.AbortWithStatus(401)
+		return
+	}
+
+	if m.db.UpdateProject(uint(id), req, uid) {
+		c.JSON(204, nil)
+	} else {
+		c.JSON(404, nil)
+	}
 }
 
 // DeleteSeller gin handler
@@ -91,7 +126,7 @@ func (m *Controller) UpdateProject(c *gin.Context) {
 // @Description	Deletes the specified project permanently, no questions asked, including all flags, evaluations and results
 // @Tags		projects
 // @Produce		json
-// @Param		id path string true "The SellerID as supplied by the sellers endpoint"
+// @Param		id path string true "The project ID as supplied by the get endpoint"
 // @Success		200	{object}		nil
 // @Failure		400	{object}		nil
 // @Failure		401	{object}		nil
@@ -100,16 +135,21 @@ func (m *Controller) UpdateProject(c *gin.Context) {
 // @Failure		500	{object}		nil
 // @Router		/api/v1/projects/delete/{id} [delete]
 func (m *Controller) DeleteProject(c *gin.Context) {
-	idRaw, found := c.Params.Get("id")
-	if !found {
-		c.AbortWithStatus(400)
-		return
-	}
-	id, err := strconv.ParseUint(idRaw, 10, 32)
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.AbortWithStatus(400)
 		return
 	}
-	logr.Debug(fmt.Sprintf("%d", id))
-	c.JSON(200, nil)
+
+	uid, ok := sessions.Default(c).Get("userid").(uint)
+	if !ok {
+		c.AbortWithStatus(401)
+		return
+	}
+
+	if m.db.DeleteProject(uint(id), uid) {
+		c.JSON(204, nil)
+	} else {
+		c.JSON(404, nil)
+	}
 }
