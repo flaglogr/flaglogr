@@ -1,14 +1,16 @@
 package model
 
 type Project struct {
-	ID          uint         `gorm:"primaryKey"`
-	APIKeys     []APIKey     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	Evaluations []Evaluation `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	ID          uint         `json:"-" gorm:"primaryKey"`
+	Name        string       `json:"name"`
+	APIKeys     []APIKey     `json:"apiKeys" gorm:"constraint:OnDelete:CASCADE;"`
+	Evaluations []Evaluation `json:"-" gorm:"constraint:OnDelete:CASCADE;"`
+	Analytics   []Analytics  `json:"-" gorm:"constraint:OnDelete:CASCADE"`
 }
 
 type APIKey struct {
-	ID        uint `gorm:"primaryKey"`
-	ProjectID uint
-	Name      string
-	Key       string
+	ID        uint   `json:"-" gorm:"primaryKey"`
+	ProjectID uint   `json:"-"`
+	Name      string `json:"name"`
+	Key       string `json:"-"`
 }
