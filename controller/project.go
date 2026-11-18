@@ -14,7 +14,7 @@ import (
 // @Description	Retrieve a list of all projects of all groups of the current user
 // @Tags		projects
 // @Produce		json
-// @Success		200	{object}		nil "TODO: Update"
+// @Success		200	{object}		[]model.Project
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		500	{object}		nil
@@ -26,13 +26,13 @@ func (m *Controller) GetProjects(c *gin.Context) {
 //
 // @Summary		Create a new project
 // @Description	Create a new project for a given group
-// @Tags		admin
+// @Tags		projects
 // @Produce		json
 // @Accept      json
 // @Param		payload body string true "TODO: Define"
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
-// @Failure		500	{object}		httputil.HTTPError
+// @Failure		500	{object}		nil
 // @Router		/api/v1/projects/create [put]
 func (m *Controller) CreateProject(c *gin.Context) {
 	c.JSON(200, nil)
@@ -48,7 +48,7 @@ type UpdateProjectRequest struct {
 //
 // @Summary		Update a project
 // @Description	Update the specified project
-// @Tags		admin
+// @Tags		projects
 // @Produce		json
 // @Accept      json
 // @Param		payload body UpdateProjectRequest true "Used to update or create the seller"
@@ -57,7 +57,7 @@ type UpdateProjectRequest struct {
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		409	{object}		nil "Seller already exists"
-// @Failure		500	{object}		httputil.HTTPError
+// @Failure		500	{object}		nil
 // @Router		/api/v1/projects/update/{id} [post]
 func (m *Controller) UpdateProject(c *gin.Context) {
 	body := UpdateProjectRequest{}
@@ -73,7 +73,7 @@ func (m *Controller) UpdateProject(c *gin.Context) {
 //
 // @Summary		Delete given project
 // @Description	Deletes the specified project permanently, no questions asked, including all flags, evaluations and results
-// @Tags		admin
+// @Tags		projects
 // @Produce		json
 // @Param		id path string true "The SellerID as supplied by the sellers endpoint"
 // @Success		200	{object}		nil
@@ -81,7 +81,7 @@ func (m *Controller) UpdateProject(c *gin.Context) {
 // @Failure		401	{object}		nil
 // @Failure		403	{object}		nil
 // @Failure		404	{object}		nil "User was not found"
-// @Failure		500	{object}		httputil.HTTPError
+// @Failure		500	{object}		nil
 // @Router		/api/v1/projects/delete/{id} [delete]
 func (m *Controller) DeleteProject(c *gin.Context) {
 	idRaw, found := c.Params.Get("id")

@@ -1,11 +1,12 @@
 package model
 
 type Flag struct {
-	ID          uint         `json:"-" gorm:"primaryKey"`
-	Identifier  string       `json:"identifier"`  // The ID used by the application
-	Description string       `json:"description"` // Any extra description in for the flag (up to 250 chars)
-	Values      []FlagValues `json:"values"`
-	Enabled     bool         `json:"enabled"`
+	ID           uint         `json:"-" gorm:"primaryKey"`
+	Identifier   string       `json:"identifier"`  // The ID used by the application
+	Description  string       `json:"description"` // Any extra description in for the flag (up to 250 chars)
+	Values       []FlagValues `json:"values"`
+	EvaluationID *uint        `json:"-"`
+	Enabled      bool         `json:"enabled"`
 }
 
 type FlagValues struct {

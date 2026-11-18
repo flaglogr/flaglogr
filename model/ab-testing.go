@@ -1,10 +1,10 @@
 package model
 
 type Evaluation struct {
-	ID                uint               `gorm:"primaryKey"`
-	ProjectID         uint               `gorm:"-"`
-	Flags             []Flag             `gorm:"constraint:OnDelete:CASCADE;"`
-	EvaluationResults []EvaluationResult `gorm:"constraint:OnDelete:CASCADE;"`
+	ID                uint               `json:"id" gorm:"primaryKey"`
+	ProjectID         uint               `json:"-"`
+	Flags             []Flag             `json:"flags" gorm:"constraint:OnDelete:CASCADE;"`
+	EvaluationResults []EvaluationResult `json:"-" gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 type EvaluationResult struct {

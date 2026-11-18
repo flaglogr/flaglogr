@@ -1,0 +1,161 @@
+basePath: /
+definitions:
+  controller.UpdateProjectRequest:
+    properties:
+      publicId:
+        example: com.janishutz
+        type: string
+      uid:
+        example: 1
+        type: integer
+      website:
+        example: https://janishutz.com
+        type: string
+    required:
+    - publicId
+    - uid
+    - website
+    type: object
+  model.APIKey:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  model.Project:
+    properties:
+      apiKeys:
+        items:
+          $ref: '#/definitions/model.APIKey'
+        type: array
+      name:
+        type: string
+    required:
+    - apiKeys
+    - name
+    type: object
+info:
+  contact:
+    email: support@janishutz.com
+    name: Support
+    url: https://github.com/flaglogr/flaglogr#readme
+  description: |
+    # flaglogr backend
+  license:
+    name: GNU Affero General Public License 3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.en.html
+  termsOfService: https://janishutz.com/legal/tos/
+  title: flaglogr backend
+  version: 0.1.0
+paths:
+  /api/v1/projects/create:
+    put:
+      consumes:
+      - application/json
+      description: Create a new project for a given group
+      parameters:
+      - description: 'TODO: Define'
+        in: body
+        name: payload
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      summary: Create a new project
+      tags:
+      - projects
+  /api/v1/projects/delete/{id}:
+    delete:
+      description: Deletes the specified project permanently, no questions asked,
+        including all flags, evaluations and results
+      parameters:
+      - description: The SellerID as supplied by the sellers endpoint
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: User was not found
+        "500":
+          description: Internal Server Error
+      summary: Delete given project
+      tags:
+      - projects
+  /api/v1/projects/get:
+    get:
+      description: Retrieve a list of all projects of all groups of the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Project'
+            type: array
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      summary: get all projects
+      tags:
+      - projects
+  /api/v1/projects/update/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Update the specified project
+      parameters:
+      - description: Used to update or create the seller
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UpdateProjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Seller created successfully
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "409":
+          description: Seller already exists
+        "500":
+          description: Internal Server Error
+      summary: Update a project
+      tags:
+      - projects
+schemes:
+- http
+- https
+swagger: "2.0"
+tags:
+- description: Asset CRUD (assets are any type of file the user can upload)
+  name: projects
